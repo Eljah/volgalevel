@@ -22,7 +22,7 @@
         // Send the query to the data source.
         function init() {
             // Specify the data source URL.
-            var query = new google.visualization.Query('visualize?count=15&km=1303');
+            var query = new google.visualization.Query('visualize?count=${count}&km=${km}');
             // Send the query with a callback function.
             query.send(handleQueryResponse);
         }

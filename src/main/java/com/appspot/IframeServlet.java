@@ -18,7 +18,14 @@ public class IframeServlet extends HttpServlet {
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/iframe.jsp");
         if (req.getParameter("km") != null) {
             req.setAttribute("km", req.getParameter("km"));
-            try {
+            if (req.getParameter("count") != null) {
+                req.setAttribute("count", req.getParameter("count"));
+            } else
+            {
+                req.setAttribute("count", req.getParameter("15"));
+            }
+
+                try {
                 dispatcher.forward(req, resp);
             } catch (ServletException e) {
                 e.printStackTrace();
@@ -27,6 +34,12 @@ public class IframeServlet extends HttpServlet {
         }
         else {
             req.setAttribute("km", "1303");
+            if (req.getParameter("count") != null) {
+                req.setAttribute("count", req.getParameter("count"));
+            } else
+            {
+                req.setAttribute("count", req.getParameter("15"));
+            }
             try {
                 dispatcher.forward(req, resp);
             } catch (ServletException e) {
