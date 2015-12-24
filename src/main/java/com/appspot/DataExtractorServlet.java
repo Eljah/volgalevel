@@ -139,21 +139,32 @@ public class DataExtractorServlet extends DataSourceServlet {
                     tr.addCell(Value.getNullValueFromValueType(ValueType.NUMBER));
                     tr.addCell(Value.getNullValueFromValueType(ValueType.TEXT));
                     tr.addCell(de.level);
-                    if (de.delta > 0) {
-                        tr.addCell(pointDate.getMonth()+1 + "/" + day + ": " + de.level + "м<br>Данные экстраполированы");
-                    } else if (de.delta < 0) {
-                        tr.addCell(pointDate.getMonth()+1 + "/" + day + ": " + de.level + "м<br>Данные экстраполированы");
-                    } else {
-                        tr.addCell(pointDate.getMonth()+1 + "/" + day + ": " + de.level + "м<br>Данные экстраполированы");
+                    if (de.delta!=null) {
+                        if (de.delta > 0) {
+                            tr.addCell(pointDate.getMonth() + 1 + "/" + day + ": " + de.level + "м<br>Данные экстраполированы");
+                        } else if (de.delta < 0) {
+                            tr.addCell(pointDate.getMonth() + 1 + "/" + day + ": " + de.level + "м<br>Данные экстраполированы");
+                        } else {
+                            tr.addCell(pointDate.getMonth() + 1 + "/" + day + ": " + de.level + "м<br>Данные экстраполированы");
+                        }
+                    }
+                    else
+                    {
+                        tr.addCell(pointDate.getMonth() + 1 + "/" + day + ": " + de.level + "м<br>Данные экстраполированы");
                     }
                 } else {
                     tr.addCell(de.level);
-                    if (de.delta > 0) {
-                        tr.addCell(pointDate.getMonth()+1 + "/" + day + ": " + de.level + "м "+de.phys+"<br><font size=\"+2\"><b>↑</b></font>" + de.delta + "см");
-                    } else if (de.delta < 0) {
-                        tr.addCell(pointDate.getMonth()+1 + "/" + day + ": " + de.level + "м "+de.phys+"<br><font size=\"+2\"><b>↓</b></font>" + de.delta + "см");
-                    } else {
-                        tr.addCell(pointDate.getMonth()+1 + "/" + day + ": " + de.level + "м "+de.phys+"<br><font size=\"+2\"><b>⟳</b></font>" + de.delta + "см");
+                    if (de.delta!=null) {
+
+                        if (de.delta > 0) {
+                            tr.addCell(pointDate.getMonth() + 1 + "/" + day + ": " + de.level + "м " + de.phys + "<br><font size=\"+2\"><b>↑</b></font>" + de.delta + "см");
+                        } else if (de.delta < 0) {
+                            tr.addCell(pointDate.getMonth() + 1 + "/" + day + ": " + de.level + "м " + de.phys + "<br><font size=\"+2\"><b>↓</b></font>" + de.delta + "см");
+                        } else {
+                            tr.addCell(pointDate.getMonth() + 1 + "/" + day + ": " + de.level + "м " + de.phys + "<br><font size=\"+2\"><b>⟳</b></font>" + de.delta + "см");
+                        }
+                    }else{
+                     tr.addCell(pointDate.getMonth() + 1 + "/" + day + ": " + de.level + "м<br>Изменения не передавались");
                     }
                     tr.addCell(Value.getNullValueFromValueType(ValueType.NUMBER));
                     tr.addCell(Value.getNullValueFromValueType(ValueType.TEXT));
