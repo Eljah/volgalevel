@@ -10,7 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 public class DataPopulatorServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        DataPopulator.main(null);
+
+        String r1=req.getParameter("r1");
+        String r2=req.getParameter("r2");
+        DataPopulator.main(new String[]{r1,r2});
         String country=req.getHeader("X-AppEngine-Country");
         String region=req.getHeader("X-AppEngine-Region");
         // https://ru.wikipedia.org/wiki/ISO_3166-2:RU yahoooo!

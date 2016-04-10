@@ -61,14 +61,31 @@ public class DataPopulator {
         }
     */
 
+        int id=0;
+        int id2=0;
 
-        int id = 0;
+        String pre="";
+
+        if (args.length==2)
+        {
+            id =Integer.parseInt(args[0]);
+            id2=Integer.parseInt(args[1]);
+        }
+
+        if (args.length!=2)
+        {
+            id =Integer.parseInt(args[0]);
+            id2=id;
+        }
+
+        pre=args[0].substring(0,args[0].indexOf(id+""));
+
         try {
-            while (id < MAXCOUNTER) {
+            while (id <= id2) {
 
                 try {
+                    URL url = new URL(BASE_URL + pre + id + ".xls");
                     id++;
-                    URL url = new URL(BASE_URL + id + ".xls");
 
                     //String url = "https://pastvu.com/p/" + id;
                     //String url = "https://pastvu.com/p/365037";
@@ -197,15 +214,24 @@ public class DataPopulator {
                                     }
                                     String pointname = row.getCell(1, Row.CREATE_NULL_AS_BLANK).getStringCellValue();
                                     String phys = row.getCell(2, Row.CREATE_NULL_AS_BLANK).getStringCellValue();
-                                    Double level = row.getCell(3, Row.CREATE_NULL_AS_BLANK).getNumericCellValue();
-                                    Double delta = null;
-                                    switch (row.getCell(4).getCellType()) {
-                                        case 0:
-                                            delta = row.getCell(4, Row.CREATE_NULL_AS_BLANK).getNumericCellValue();
-                                            break;
-                                        case 1:
-                                            delta = Double.parseDouble(row.getCell(4, Row.CREATE_NULL_AS_BLANK).getStringCellValue());
-                                            break;
+                                    Double level = null;
+                                    try {
+                                        level = row.getCell(3, Row.CREATE_NULL_AS_BLANK).getNumericCellValue();
+                                    }
+                                    catch (java.lang.IllegalStateException exception)
+                                    {
+                                        level = Double.parseDouble(row.getCell(3, Row.CREATE_NULL_AS_BLANK).getStringCellValue());
+
+                                    }
+
+                                    Double delta=null;
+                                    try
+                                    {
+                                        delta = row.getCell(4, Row.CREATE_NULL_AS_BLANK).getNumericCellValue();
+                                    }
+                                    catch (java.lang.IllegalStateException exception)
+                                    {
+                                        delta = Double.parseDouble(row.getCell(4, Row.CREATE_NULL_AS_BLANK).getStringCellValue());
                                     }
                                     //todo Oka Vetluga
                                     log.info("Km: " + km);

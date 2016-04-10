@@ -142,10 +142,30 @@ public class DowloadAndParseNavigationDataServlet extends HttpServlet {
                         km = ((long) (sheet.getRow(row.getRowNum() - 1)).getCell(0).getNumericCellValue() + 1);
                     }
                     String pointname = row.getCell(1, Row.CREATE_NULL_AS_BLANK).getStringCellValue();
+
                     String phys = row.getCell(2, Row.CREATE_NULL_AS_BLANK).getStringCellValue();
-                    Double level = row.getCell(3, Row.CREATE_NULL_AS_BLANK).getNumericCellValue();
-                    Double delta = row.getCell(4, Row.CREATE_NULL_AS_BLANK).getNumericCellValue();
-                    //todo Oka Vetluga
+
+
+                    Double level = null;
+                    try {
+                        level = row.getCell(3, Row.CREATE_NULL_AS_BLANK).getNumericCellValue();
+                    }
+                    catch (java.lang.IllegalStateException exception)
+                    {
+                        level = Double.parseDouble(row.getCell(3, Row.CREATE_NULL_AS_BLANK).getStringCellValue());
+
+                    }
+
+                    Double delta=null;
+                    try
+                    {
+                        delta = row.getCell(4, Row.CREATE_NULL_AS_BLANK).getNumericCellValue();
+                    }
+                    catch (java.lang.IllegalStateException exception)
+                    {
+                        delta = Double.parseDouble(row.getCell(4, Row.CREATE_NULL_AS_BLANK).getStringCellValue());
+                    }
+                        //todo Oka Vetluga
                     log.info("Km: " + km);
                     new StreamGauge(km, pointname);
                     dataentries.add(new DataEntry(km, date, phys, level, delta, false));
