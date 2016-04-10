@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Getting Started Example</title>
+    <title>Архив уровней Волги по данным водомерных постов</title>
     <meta charset="UTF-8">
     <!--Load the AJAX API-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">

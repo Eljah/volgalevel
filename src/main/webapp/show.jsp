@@ -4,7 +4,7 @@
 
 <html>
 <head>
-    <title>Getting Started Example</title>
+    <title>Архив уровней Волги по данным водомерных постов</title>
     <meta charset="UTF-8">
     <!--Load the AJAX API-->
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
@@ -122,9 +122,18 @@
 </form>
 
 <!--Div that will hold the visualization-->
-<div id="chart_div"></div>
+<div id="chart_div">
+</div>
+
+<br>
+Вы можете добавить данный динамически обновляемый график для определенного водомерного поста на свой сайт. Для этого скопируйте текст из поля ниже.
+<br>
 
 <textarea style="width: 300px;height: 200px;" class="select-on-click" id="embed" readonly="">&lt;iframe height='200' width='300' frameborder='0' allowtransparency='true' scrolling='no' src='http://volgalevel.appspot.com/iframe?km=${km}&count=${count}'&gt;&lt;/iframe&gt;</textarea>
+
+<br>
+Хронологический список таблиц с данными водомерных постов
+<br>
 
 <c:forEach items="${allfiles}" var="value">
 <br>
