@@ -83,6 +83,16 @@
         <url-pattern>/file</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>selfload</servlet-name>
+        <servlet-class>com.appspot.SelfloadServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>selfload</servlet-name>
+        <url-pattern>/selfload</url-pattern>
+    </servlet-mapping>
+
 <!-- [START Objectify] -->
     <filter>
       <filter-name>ObjectifyFilter</filter-name>
