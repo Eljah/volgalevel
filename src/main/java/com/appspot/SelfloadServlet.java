@@ -1,6 +1,8 @@
 package com.appspot;
 
 import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -28,6 +30,7 @@ public class SelfloadServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        MemcacheServiceFactory.getMemcacheService().clearAll(); //clearing cache since we are updating the db
         long filedate = Long.parseLong(req.getParameter("date"));
         fileFor(filedate, resp);
     }

@@ -3,6 +3,7 @@ package com.appspot;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -41,6 +42,7 @@ public class DowloadAndParseNavigationDataServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) {
 
+        MemcacheServiceFactory.getMemcacheService().clearAll(); //clearing cache since we are updating the db
         URL url = null;
         try {
             url = new URL(BASE_URL + "/info/path/");

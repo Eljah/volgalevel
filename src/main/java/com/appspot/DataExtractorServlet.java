@@ -1,5 +1,8 @@
 package com.appspot;
 
+import com.google.appengine.api.memcache.ErrorHandlers;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.visualization.datasource.DataSourceServlet;
 import com.google.visualization.datasource.base.TypeMismatchException;
 import com.google.visualization.datasource.datatable.ColumnDescription;
@@ -22,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
 
 // This example extends DataSourceServlet
 public class DataExtractorServlet extends DataSourceServlet {
@@ -100,24 +104,41 @@ public class DataExtractorServlet extends DataSourceServlet {
 
         data.addColumns(cd);
 
-        List<DataEntry> datasets;
-        if (count != -1) {
-            datasets = ObjectifyService.ofy()
-                    .load()
-                    .type(DataEntry.class) // We want only Greetings
-                    .ancestor(new StreamGauge((long) km))    // Anyone in this book
-                    .orderKey(true)
-                    .limit(count)             // Only show 5 of them.
-                    .list();
-        } else {
-            datasets = ObjectifyService.ofy()
-                    .load()
-                    .type(DataEntry.class) // We want only Greetings
-                    .ancestor(new StreamGauge((long) km))    // Anyone in this book
-                    //.order("-date")
-                    .list();
+        //cache
 
+
+
+        List<DataEntry> datasets;
+
+        MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+        syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
+        datasets = (List<DataEntry>) syncCache.get(count+km); // Read from cache.
+        if (datasets == null) {
+            // Get value from another source.
+            // ........
+
+
+            if (count != -1) {
+                datasets = ObjectifyService.ofy()
+                        .load()
+                        .type(DataEntry.class) // We want only Greetings
+                        .ancestor(new StreamGauge((long) km))    // Anyone in this book
+                        .orderKey(true)
+                        .limit(count)             // Only show 5 of them.
+                        .list();
+            } else {
+                datasets = ObjectifyService.ofy()
+                        .load()
+                        .type(DataEntry.class) // We want only Greetings
+                        .ancestor(new StreamGauge((long) km))    // Anyone in this book
+                        //.order("-date")
+                        .list();
+
+            }
+            syncCache.put(count+km, datasets); // Populate cache.
         }
+
+
         //Collections.reverse(datasets);
         for (DataEntry de : datasets) {
             Date pointDate = new Date(de.date);

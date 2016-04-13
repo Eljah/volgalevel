@@ -1,5 +1,7 @@
 package com.appspot;
 
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 public class DataPopulatorServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) {
-
+        MemcacheServiceFactory.getMemcacheService().clearAll(); //clearing cache since we are updating the db
         String r1=req.getParameter("r1");
         String r2=req.getParameter("r2");
         DataPopulator.main(new String[]{r1,r2});
