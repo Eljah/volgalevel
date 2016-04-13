@@ -79,19 +79,19 @@ public class SelfloadServlet extends HttpServlet {
                     try {
                         level = row.getCell(3, Row.CREATE_NULL_AS_BLANK).getNumericCellValue();
                     } catch (java.lang.IllegalStateException exception) {
-                        level = Double.parseDouble(row.getCell(3, Row.CREATE_NULL_AS_BLANK).getStringCellValue());
+                        level = Double.parseDouble(row.getCell(3, Row.CREATE_NULL_AS_BLANK).getStringCellValue().replaceAll("([^\\d]+)", "."));
 
                     } catch (java.lang.NumberFormatException exception) {
-                        level = Double.parseDouble((row.getCell(3, Row.CREATE_NULL_AS_BLANK).getStringCellValue().replaceAll("([^\\d]+)", ".")));
+                        level = Double.parseDouble(row.getCell(3, Row.CREATE_NULL_AS_BLANK).getStringCellValue().replaceAll("([^\\d]+)", "."));
                     }
 
                     Double delta = null;
                     try {
                         delta = row.getCell(4, Row.CREATE_NULL_AS_BLANK).getNumericCellValue();
                     } catch (java.lang.IllegalStateException exception) {
-                        delta = Double.parseDouble(row.getCell(4, Row.CREATE_NULL_AS_BLANK).getStringCellValue());
+                        delta = Double.parseDouble(row.getCell(4, Row.CREATE_NULL_AS_BLANK).getStringCellValue().replaceAll("([^\\d]+)", "."));
                     } catch (java.lang.NumberFormatException exception) {
-                        level = Double.parseDouble((row.getCell(3, Row.CREATE_NULL_AS_BLANK).getStringCellValue().replaceAll("([^\\d]+)", ".")));
+                        delta = Double.parseDouble(row.getCell(4, Row.CREATE_NULL_AS_BLANK).getStringCellValue().replaceAll("([^\\d]+)", "."));
                     }
                     //todo Oka Vetluga
                     log.info("Km: " + km);
