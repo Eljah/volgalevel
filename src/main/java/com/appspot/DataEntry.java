@@ -4,6 +4,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.*;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Date;
  */
 @Cache
 @Entity
-public class DataEntry {
+public class DataEntry implements Serializable {
     @Parent
     Key<StreamGauge> streamGauge;
     @Id

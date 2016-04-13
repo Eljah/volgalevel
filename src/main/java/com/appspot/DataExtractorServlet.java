@@ -22,6 +22,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -33,7 +34,7 @@ public class DataExtractorServlet extends DataSourceServlet {
     @Override
     public DataTable generateDataTable(Query query, HttpServletRequest request) {
         // Create a data table,
-        DataTable data = new DataTable();
+        DataTable data;
 
         String cookieKm = 1303 + "";
         String cookieCount = 15 + "";
@@ -64,7 +65,7 @@ public class DataExtractorServlet extends DataSourceServlet {
 
         if (request.getAttribute("count") != null) {
             count = Integer.parseInt(request.getParameter("count"));
-        } else if (request.getParameter("count") != null&&!request.getParameter("count").equals("")) {
+        } else if (request.getParameter("count") != null && !request.getParameter("count").equals("")) {
             count = Integer.parseInt(request.getParameter("count"));
         } else if (countFount) {
             count = Integer.parseInt(cookieCount);
@@ -73,7 +74,7 @@ public class DataExtractorServlet extends DataSourceServlet {
         }
         if (request.getAttribute("km") != null) {
             km = Integer.parseInt(request.getParameter("km"));
-        } else if (request.getParameter("km") != null&&!request.getParameter("km").equals("")) {
+        } else if (request.getParameter("km") != null && !request.getParameter("km").equals("")) {
             km = Integer.parseInt(request.getParameter("km"));
         } else if (kmFount) {
             km = Integer.parseInt(cookieKm);
@@ -81,6 +82,7 @@ public class DataExtractorServlet extends DataSourceServlet {
             km = 1303;
         }
 
+        data = new DataTable();
 
         ArrayList cd = new ArrayList();
         cd.add(new ColumnDescription("date", ValueType.DATE, "Date"));
@@ -107,15 +109,17 @@ public class DataExtractorServlet extends DataSourceServlet {
         //cache
 
 
-
         List<DataEntry> datasets;
+
+        // Get value from another source.
+        // ........
 
         MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
         syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
-        datasets = (List<DataEntry>) syncCache.get(count+km); // Read from cache.
+        datasets = (List<DataEntry>) syncCache.get(count +"_" +km); // Read from cache.
+
+
         if (datasets == null) {
-            // Get value from another source.
-            // ........
 
 
             if (count != -1) {
@@ -135,9 +139,8 @@ public class DataExtractorServlet extends DataSourceServlet {
                         .list();
 
             }
-            syncCache.put(count+km, datasets); // Populate cache.
+            syncCache.put(count +"_" + km, datasets);
         }
-
 
         //Collections.reverse(datasets);
         for (DataEntry de : datasets) {
@@ -160,7 +163,7 @@ public class DataExtractorServlet extends DataSourceServlet {
                     tr.addCell(Value.getNullValueFromValueType(ValueType.NUMBER));
                     tr.addCell(Value.getNullValueFromValueType(ValueType.TEXT));
                     tr.addCell(de.level);
-                    if (de.delta!=null) {
+                    if (de.delta != null) {
                         if (de.delta > 0) {
                             tr.addCell(pointDate.getMonth() + 1 + "/" + day + ": " + de.level + "м<br>Данные экстраполированы");
                         } else if (de.delta < 0) {
@@ -168,14 +171,12 @@ public class DataExtractorServlet extends DataSourceServlet {
                         } else {
                             tr.addCell(pointDate.getMonth() + 1 + "/" + day + ": " + de.level + "м<br>Данные экстраполированы");
                         }
-                    }
-                    else
-                    {
+                    } else {
                         tr.addCell(pointDate.getMonth() + 1 + "/" + day + ": " + de.level + "м<br>Данные экстраполированы");
                     }
                 } else {
                     tr.addCell(de.level);
-                    if (de.delta!=null) {
+                    if (de.delta != null) {
 
                         if (de.delta > 0) {
                             tr.addCell(pointDate.getMonth() + 1 + "/" + day + ": " + de.level + "м " + de.phys + "<br><font size=\"+2\"><b>↑</b></font>" + de.delta + "см");
@@ -184,8 +185,8 @@ public class DataExtractorServlet extends DataSourceServlet {
                         } else {
                             tr.addCell(pointDate.getMonth() + 1 + "/" + day + ": " + de.level + "м " + de.phys + "<br><font size=\"+2\"><b>⟳</b></font>" + de.delta + "см");
                         }
-                    }else{
-                     tr.addCell(pointDate.getMonth() + 1 + "/" + day + ": " + de.level + "м<br>Изменения не передавались");
+                    } else {
+                        tr.addCell(pointDate.getMonth() + 1 + "/" + day + ": " + de.level + "м<br>Изменения не передавались");
                     }
                     tr.addCell(Value.getNullValueFromValueType(ValueType.NUMBER));
                     tr.addCell(Value.getNullValueFromValueType(ValueType.TEXT));
@@ -201,8 +202,11 @@ public class DataExtractorServlet extends DataSourceServlet {
                 System.out.println("Invalid type!");
                 e.printStackTrace();
             }
+
+
+            // Populate cache.
         }
 
-        return data;
+        return (DataTable) data;
     }
 }
