@@ -155,7 +155,7 @@ public class DowloadAndParseNavigationDataServlet extends HttpServlet {
                         level = Double.parseDouble(row.getCell(3, Row.CREATE_NULL_AS_BLANK).getStringCellValue());
 
                     } catch (java.lang.NumberFormatException exception) {
-                        level = Double.parseDouble((row.getCell(3, Row.CREATE_NULL_AS_BLANK).getStringCellValue()).replaceAll("[^\\d]", "."));
+                        level = Double.parseDouble((row.getCell(3, Row.CREATE_NULL_AS_BLANK).getStringCellValue()).replaceAll("([^\\d]+)", "."));
                     }
 
                     Double delta=null;
@@ -167,7 +167,7 @@ public class DowloadAndParseNavigationDataServlet extends HttpServlet {
                     {
                         delta = Double.parseDouble(row.getCell(4, Row.CREATE_NULL_AS_BLANK).getStringCellValue());
                     } catch (java.lang.NumberFormatException exception) {
-                        level = Double.parseDouble((row.getCell(3, Row.CREATE_NULL_AS_BLANK).getStringCellValue()).replaceAll("[^\\d]", "."));
+                        level = Double.parseDouble((row.getCell(3, Row.CREATE_NULL_AS_BLANK).getStringCellValue()).replaceAll("([^\\d]+)", "."));
                     }
                         //todo Oka Vetluga
                     log.info("Km: " + km);
