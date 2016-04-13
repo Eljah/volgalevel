@@ -23,12 +23,12 @@ import java.util.logging.Logger;
 /**
  * Created by eljah32 on 4/13/2016.
  */
-public class SelfloadServlet  extends HttpServlet {
+public class SelfloadServlet extends HttpServlet {
     private static final Logger log = Logger.getLogger(DowloadAndParseNavigationDataServlet.class.getName());
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long filedate=Long.parseLong(req.getParameter("date"));
+        long filedate = Long.parseLong(req.getParameter("date"));
         fileFor(filedate, resp);
     }
 
@@ -81,6 +81,8 @@ public class SelfloadServlet  extends HttpServlet {
                     } catch (java.lang.IllegalStateException exception) {
                         level = Double.parseDouble(row.getCell(3, Row.CREATE_NULL_AS_BLANK).getStringCellValue());
 
+                    } catch (java.lang.NumberFormatException exception) {
+                        level = Double.parseDouble((row.getCell(3, Row.CREATE_NULL_AS_BLANK).getStringCellValue()).replaceAll("[^\\d]", "."));
                     }
 
                     Double delta = null;
@@ -88,6 +90,8 @@ public class SelfloadServlet  extends HttpServlet {
                         delta = row.getCell(4, Row.CREATE_NULL_AS_BLANK).getNumericCellValue();
                     } catch (java.lang.IllegalStateException exception) {
                         delta = Double.parseDouble(row.getCell(4, Row.CREATE_NULL_AS_BLANK).getStringCellValue());
+                    } catch (java.lang.NumberFormatException exception) {
+                        level = Double.parseDouble((row.getCell(3, Row.CREATE_NULL_AS_BLANK).getStringCellValue()).replaceAll("[^\\d]", "."));
                     }
                     //todo Oka Vetluga
                     log.info("Km: " + km);
@@ -124,4 +128,5 @@ public class SelfloadServlet  extends HttpServlet {
 
             // serve the first image
         }
-    }}
+    }
+}
