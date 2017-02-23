@@ -219,19 +219,25 @@ public class DowloadAndParseNavigationDataServlet extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        for (StreamGauge sg : ObjectifyService.ofy()
-                .load()
-                .type(StreamGauge.class)) {
-            List<DataEntry> datasets = ObjectifyService.ofy()
+
+
+        //removed as too expensive
+        if (req.getParameter("debug")!=null) {
+            for (StreamGauge sg : ObjectifyService.ofy()
                     .load()
-                    .type(DataEntry.class) // We want only Greetings
-                    .ancestor(sg)    // Anyone in this book
-                   // .limit(5)             // Only show 5 of them.
-                    .list();
-            wr.println(sg.getKm()+"km ("+sg.getName()+")");
-            for (DataEntry de : datasets) {
-                wr.println(new Date(de.date) + ": " + de.level + "m (" + de.delta + ") cm, extrapolation="+de.extrapolation);
+                    .type(StreamGauge.class)) {
+                List<DataEntry> datasets = ObjectifyService.ofy()
+                        .load()
+                        .type(DataEntry.class) // We want only Greetings
+                        .ancestor(sg)    // Anyone in this book
+                        // .limit(5)             // Only show 5 of them.
+                        .list();
+                wr.println(sg.getKm() + "km (" + sg.getName() + ")");
+                for (DataEntry de : datasets) {
+                    wr.println(new Date(de.date) + ": " + de.level + "m (" + de.delta + ") cm, extrapolation=" + de.extrapolation);
+                }
             }
         }
+        wr.println("Success!");
     }
 }
