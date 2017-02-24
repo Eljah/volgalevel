@@ -93,6 +93,16 @@
         <url-pattern>/selfload</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>delete</servlet-name>
+        <servlet-class>com.appspot.DeleteSpecificPointServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>delete</servlet-name>
+        <url-pattern>/delete</url-pattern>
+    </servlet-mapping>
+
 <!-- [START Objectify] -->
     <filter>
       <filter-name>ObjectifyFilter</filter-name>
@@ -120,6 +130,15 @@
         <web-resource-collection>
             <web-resource-name>dataload</web-resource-name>
             <url-pattern>/dataload</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>delete</web-resource-name>
+            <url-pattern>/delete</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>admin</role-name>

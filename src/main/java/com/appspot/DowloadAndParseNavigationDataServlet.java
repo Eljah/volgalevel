@@ -43,45 +43,65 @@ public class DowloadAndParseNavigationDataServlet extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp) {
 
         MemcacheServiceFactory.getMemcacheService().clearAll(); //clearing cache since we are updating the db
-        URL url = null;
-        try {
-            url = new URL(BASE_URL + "/info/path/");
-        } catch (MalformedURLException e) {
-            log.severe("Document path has error in " + BASE_URL + "/info/path/");
-            e.printStackTrace();
-        }
 
-        Document document = null;
-        try {
-            document = Jsoup.parse(url.openStream(), "Windows-1251", url.toString());
-            log.info("Page containing link to the document downloaded well from " + url.toString());
-        } catch (IOException e) {
-            log.severe("Page containing link to the document can't be loaded at " + url.toString());
-            e.printStackTrace();
-        }
-        Element element = document.body().select("a:contains(Информационный бюллетень)").first();
-        Pattern pattern = Pattern.compile(".(\\d{2}.\\d{2}.\\d{4}).");
+        String specificFile=req.getParameter("file");
+        String specificDate=req.getParameter("date");
+        URL urlXLS = null;
         Date date = null;
-        Matcher matcher = pattern.matcher(element.text());
-        if (matcher.find()) {
+
+        if (specificFile==null&&specificDate==null) {
+            URL url = null;
             try {
-                date = new SimpleDateFormat("dd.MM.yyyy").parse(matcher.group(0));
-                log.info("Document date is parsed as " + date + " from document name " + element.text());
-            } catch (ParseException e) {
-                date = null;
-                log.severe("Document date parse error in document name " + element.text());
+                url = new URL(BASE_URL + "/info/path/");
+            } catch (MalformedURLException e) {
+                log.severe("Document path has error in " + BASE_URL + "/info/path/");
+                e.printStackTrace();
             }
 
-        } else {
-            log.severe("Date not parsed: date format group ot fount");
+            Document document = null;
+            try {
+                document = Jsoup.parse(url.openStream(), "Windows-1251", url.toString());
+                log.info("Page containing link to the document downloaded well from " + url.toString());
+            } catch (IOException e) {
+                log.severe("Page containing link to the document can't be loaded at " + url.toString());
+                e.printStackTrace();
+            }
+            Element element = document.body().select("a:contains(Информационный бюллетень)").first();
+            Pattern pattern = Pattern.compile(".(\\d{2}.\\d{2}.\\d{4}).");
+            Matcher matcher = pattern.matcher(element.text());
+            if (matcher.find()) {
+                try {
+                    date = new SimpleDateFormat("dd.MM.yyyy").parse(matcher.group(0));
+                    log.info("Document date is parsed as " + date + " from document name " + element.text());
+                } catch (ParseException e) {
+                    date = null;
+                    log.severe("Document date parse error in document name " + element.text());
+                }
 
+            } else {
+                log.severe("Date not parsed: date format group ot fount");
+
+            }
+            log.info("The xls file url is " + BASE_URL + element.attr("href"));
+
+            try {
+                urlXLS = new URL(BASE_URL + element.attr("href"));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
         }
-        log.info("The xls file url is " + BASE_URL + element.attr("href"));
-        URL urlXLS = null;
-        try {
-            urlXLS = new URL(BASE_URL + element.attr("href"));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        else
+        {
+            try {
+                urlXLS = new URL(BASE_URL +"/admingo/uploadimg/"+ specificFile);
+                try {
+                    date=new SimpleDateFormat("dd.MM.yyyy").parse(specificDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
         }
 
         InputStream excelFileToRead = null;
@@ -202,8 +222,14 @@ public class DowloadAndParseNavigationDataServlet extends HttpServlet {
 
                     for (int j=extrapolationStartValue+1;j<=(extrapolationEndValue-1);j++)
                     {
-                        long kmsBetween=(dataEntriesArray[j].streamGauge.getId()-dataEntriesArray[j-1].streamGauge.getId());
-                        new DataEntry(dataEntriesArray[j].streamGauge.getId(),date,dataEntriesArray[j].phys,dataEntriesArray[extrapolationStartValue].level+kmsBetween*LevelPerKm,dataEntriesArray[j].delta,true);
+                        if (dataEntriesArray[extrapolationStartValue].level!=0&&dataEntriesArray[extrapolationEndValue].level!=0) {
+                            long kmsBetween = (dataEntriesArray[j].streamGauge.getId() - dataEntriesArray[j - 1].streamGauge.getId());
+                            new DataEntry(dataEntriesArray[j].streamGauge.getId(), date, dataEntriesArray[j].phys, dataEntriesArray[extrapolationStartValue].level + kmsBetween * LevelPerKm, dataEntriesArray[j].delta, true);
+                        }
+                        else
+                        {
+                            new DataEntry(dataEntriesArray[j].streamGauge.getId(), date, dataEntriesArray[j].phys, null, dataEntriesArray[j].delta, true);
+                        }
                     }
                 }
             }

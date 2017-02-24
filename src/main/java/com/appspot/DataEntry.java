@@ -16,7 +16,9 @@ public class DataEntry implements Serializable {
     @Parent
     Key<StreamGauge> streamGauge;
     @Id
+    @Index
     public Long date;
+    @Index
     private Date visibleDate;
     public String phys;
     public Double level;
@@ -26,6 +28,11 @@ public class DataEntry implements Serializable {
     DataEntry()
     {
 
+    }
+
+    DataEntry(Long date)
+    {
+        this.date=date;
     }
 
     DataEntry(Long km, Date date, String phys, Double level, Double delta, boolean extrapolation)
