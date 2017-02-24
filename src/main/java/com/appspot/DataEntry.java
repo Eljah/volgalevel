@@ -19,8 +19,9 @@ public class DataEntry implements Serializable {
     @Index
     public Long date;
     @Index
-    private Date visibleDate;
+    public Date visibleDate;
     public String phys;
+    @Index
     public Double level;
     public Double delta;
     public boolean extrapolation;

@@ -37,7 +37,7 @@ public class DeleteSpecificPointServlet extends HttpServlet {
                     .type(DataEntry.class).
                             ancestor(new StreamGauge(Long.parseLong(streamgauge))).
                             filter("visibleDate =", (new SimpleDateFormat("dd.MM.yyyy").parse(date))).first().now();
-            System.out.println(dataEntry.date);
+            //System.out.println(dataEntry.date);
             //List<com.googlecode.objectify.Key<Object>> keysToDelete=ObjectifyService.ofy().load().ancestor(dataEntry).keys().list();
             List<com.googlecode.objectify.Key<DataEntry>> keysToDelete=ObjectifyService.ofy()
                     .load()

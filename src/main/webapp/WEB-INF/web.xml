@@ -103,6 +103,20 @@
         <url-pattern>/delete</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>FeedServlet</servlet-name>
+        <servlet-class>com.appspot.FeedServlet</servlet-class>
+        <init-param>
+            <param-name>default.feed.type</param-name>
+            <param-value>rss_2.0</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>FeedServlet</servlet-name>
+        <url-pattern>/feed</url-pattern>
+    </servlet-mapping>
+
 <!-- [START Objectify] -->
     <filter>
       <filter-name>ObjectifyFilter</filter-name>
