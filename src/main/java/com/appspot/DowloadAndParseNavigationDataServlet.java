@@ -7,6 +7,7 @@ import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -231,6 +232,25 @@ public class DowloadAndParseNavigationDataServlet extends HttpServlet {
                             new DataEntry(dataEntriesArray[j].streamGauge.getId(), date, dataEntriesArray[j].phys, null, dataEntriesArray[j].delta, true);
                         }
                     }
+
+
+
+                }
+            }
+            for (DataEntry de: dataEntriesArray)
+            //cleaning up the null data after extrapolation: all nulls are use to be mistakes
+            {
+                System.out.println(de.level+" "+de.streamGauge.getId());
+                if (de.level==0)
+                {
+                    System.out.println("Deleting: "+de.level+" "+de.streamGauge.getId());
+
+                    List<com.googlecode.objectify.Key<DataEntry>> keysToDelete=ObjectifyService.ofy()
+                            .load()
+                            .type(DataEntry.class).
+                                    ancestor(de.streamGauge).
+                                    filter("level =", 0.0d).keys().list();
+                    ObjectifyService.ofy().delete().keys(keysToDelete);
                 }
             }
 

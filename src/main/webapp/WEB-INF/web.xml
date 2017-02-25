@@ -117,6 +117,21 @@
         <url-pattern>/feed</url-pattern>
     </servlet-mapping>
 
+
+    <servlet>
+        <servlet-name>ChartServlet</servlet-name>
+        <servlet-class>com.appspot.ChartServlet</servlet-class>
+        <init-param>
+            <param-name>default.feed.type</param-name>
+            <param-value>rss_2.0</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ChartServlet</servlet-name>
+        <url-pattern>/chart</url-pattern>
+    </servlet-mapping>
+
 <!-- [START Objectify] -->
     <filter>
       <filter-name>ObjectifyFilter</filter-name>
