@@ -1,6 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page isELIgnored="false"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://displaytag.sf.net" prefix="display" %>
 
 <html>
 <head>
@@ -100,7 +102,7 @@
     </script>
 </head>
 <body>
-<h1>График уровня Волги по водомерным постам</h1>
+<h1>Архив уровней Волги по водомерным постам имени Эрнста Галимовича Улумбекова</h1>
 Выберите интересующий вас водомерный пост и число точек на графике:
 <form id="kms" action="/welcome">
 <select name="km" onchange="submit()">
@@ -135,10 +137,34 @@
 Хронологический список таблиц с данными водомерных постов
 <br>
 
-<c:forEach items="${allfiles}" var="value">
-<br>
-    <a href="/file?date=${value.date}">${value.name} (${value.datevisible})</a>
-</c:forEach>
+<display:table name="allfiles" id="row" pagesize="10"
+               export="true" sort="list" requestURI="welcome" class="table table-bordered table-striped">
+
+    <display:setProperty name="paging.banner.no_items_found">
+        <div class="pagination">No {0} found.</div>
+    </display:setProperty>
+    <display:setProperty name="paging.banner.one_item_found">
+        <div class="pagination">One {0} found.</div>
+    </display:setProperty>
+    <display:setProperty name="paging.banner.all_items_found">
+        <div class="pagination">{0} {1} found, displaying all {2}.</div>
+    </display:setProperty>
+    <display:setProperty name="paging.banner.some_items_found">
+        <div class="pagination">{0} {1} found, displaying {2} to {3}.</div>
+    </display:setProperty>
+    <display:setProperty name="paging.banner.onepage">
+        <div class="pagination">{0}</div>
+    </display:setProperty>
+
+    <display:column property="name" title="Имя файла и полный адрес файла"
+                    sortable="true" headerClass="sortable"/>
+    <display:column title="Скачать файл за число"
+                    sortable="true" headerClass="sortable">
+        <a href="file?date=${row.date}" class="btn btn-success"><fmt:formatDate pattern="yyyy-MM-dd" value="${row.datevisible}"/></a>
+    </display:column>
+
+</display:table>
+
 
 </body>
 </html>

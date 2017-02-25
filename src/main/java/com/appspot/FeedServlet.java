@@ -156,7 +156,7 @@ public class FeedServlet extends HttpServlet {
         for (DataEntry dataEntry : dataEntries) {
             System.out.println(dataEntry.level);
             entry = new CustomEntryImpl();
-            entry.setTitle(String.valueOf(dataEntry.visibleDate));
+            entry.setTitle(new SimpleDateFormat("yyyy-MM-dd").format(dataEntry.visibleDate));
             entry.setLink("http://volgalevel.appspot.com/welcome?km=1303&count=" + dataEntries.indexOf(dataEntry));
             entry.setPublishedDate(dataEntry.visibleDate);
             description = new SyndContentImpl();
