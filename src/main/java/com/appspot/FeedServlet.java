@@ -162,7 +162,7 @@ public class FeedServlet extends HttpServlet {
             description = new SyndContentImpl();
             description.setType("text/plain");
             NumberFormat formatter = new DecimalFormat("#0.00");
-            description.setValue("Уровень: " + formatter.format(dataEntry.level) + " (" + dataEntry.delta + ")" + ((dataEntry.phys.trim() != "" && dataEntry.phys != null) ? ", " + dataEntry.phys : "") + (dataEntry.extrapolation ? ", уровень экстраполирован" : ""));
+            description.setValue("Уровень: " + formatter.format(dataEntry.level) + " (" + dataEntry.delta + ")" + (dataEntry.phys != null&&(dataEntry.phys.trim() != "") ? ", " + dataEntry.phys : "") + (dataEntry.extrapolation ? ", уровень экстраполирован" : ""));
             entry.setDescription(description);
             entries.add(entry);
         }
