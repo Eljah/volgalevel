@@ -138,20 +138,6 @@
     </servlet-mapping>
 
 
-    <servlet>
-        <servlet-name>PollutionServlet</servlet-name>
-        <servlet-class>com.appspot.ParsePollutionServlet</servlet-class>
-        <init-param>
-            <param-name>default.feed.type</param-name>
-            <param-value>rss_2.0</param-value>
-        </init-param>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>PollutionServlet</servlet-name>
-        <url-pattern>/pollution</url-pattern>
-    </servlet-mapping>
-
 <!-- [START Objectify] -->
     <filter>
       <filter-name>ObjectifyFilter</filter-name>
