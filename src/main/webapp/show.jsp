@@ -134,6 +134,9 @@
 <textarea style="width: 300px;height: 200px;" class="select-on-click" id="embed" readonly="">&lt;iframe height='200' width='300' frameborder='0' allowtransparency='true' scrolling='no' src='http://volgalevel.appspot.com/iframe?km=${km}&count=${count}'&gt;&lt;/iframe&gt;</textarea>
 
 <br>
+Можете <a href="https://yandex.ru/?add=192517">добавить виджет на Яндекс с последними 5 уровнями воды в Казани</a>
+
+<br>
 Хронологический список таблиц с данными водомерных постов
 <br>
 
