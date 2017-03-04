@@ -11,6 +11,7 @@ import com.googlecode.objectify.ObjectifyService;
 import com.rometools.rome.feed.CopyFrom;
 import com.rometools.rome.feed.module.Module;
 import com.rometools.rome.feed.module.ModuleImpl;
+import com.rometools.rome.feed.rss.Channel;
 import com.rometools.rome.feed.synd.*;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedOutput;
@@ -124,7 +125,7 @@ public class FeedServlet extends HttpServlet {
             root.addNamespaceDeclaration(ATOM_NS);
 
             Element atomLink = new Element("link", ATOM_NS);
-            atomNSModule.setLink("http://volgalevel.appspot.com/feed");
+            atomNSModule.setLink("http://volgalevel.appspot.com/feedkzn");
             atomLink.setAttribute("href", atomNSModule.getLink());
             atomLink.setAttribute("rel", "self");
             atomLink.setAttribute("type", "application/rss+xml");
@@ -143,8 +144,10 @@ public class FeedServlet extends HttpServlet {
     }
 
     protected SyndFeed getFeed(HttpServletRequest req, List<DataEntry> dataEntries, StreamGauge streamGauge) throws IOException, FeedException {
-        SyndFeed feed = new SyndFeedImpl();
-
+        Channel ch = new Channel();
+        ch.setLastBuildDate(new Date());
+        ch.setFeedType(_defaultFeedType);
+        SyndFeed feed = new CustomSyndFeed(ch);
         feed.setTitle("Архив уровней Волги");
         feed.setLink("http://volgalevel.appspot.com");
         feed.setDescription("Водомерный пост " + streamGauge.getName());
@@ -157,12 +160,12 @@ public class FeedServlet extends HttpServlet {
             System.out.println(dataEntry.level);
             entry = new CustomEntryImpl();
             entry.setTitle(new SimpleDateFormat("yyyy-MM-dd").format(dataEntry.visibleDate));
-            entry.setLink("http://volgalevel.appspot.com/welcome?km=1303&count=" + dataEntries.indexOf(dataEntry));
+            entry.setLink("http://volgalevel.appspot.com/welcome?id="+dataEntry.date.toString()+""+dataEntry.streamGauge.getId() );
             entry.setPublishedDate(dataEntry.visibleDate);
             description = new SyndContentImpl();
             description.setType("text/plain");
             NumberFormat formatter = new DecimalFormat("#0.00");
-            description.setValue("Уровень: " + formatter.format(dataEntry.level) + " (" + dataEntry.delta + ")" + (dataEntry.phys.trim().equals("") ? "": ", " + dataEntry.phys) + (dataEntry.extrapolation ? ", уровень экстраполирован" : ""));
+            description.setValue("Уровень: " + formatter.format(dataEntry.level) + " (" + dataEntry.delta + ")" + (dataEntry.phys.trim().equals("") ? "" : ", " + dataEntry.phys) + (dataEntry.extrapolation ? ", уровень экстраполирован                                    " : "                                    "));
             entry.setDescription(description);
             entries.add(entry);
         }
@@ -243,5 +246,24 @@ public class FeedServlet extends HttpServlet {
         }
     }
 
+
+    public class CustomSyndFeed extends SyndFeedImpl {
+
+        protected Date publishedDate;
+
+        public CustomSyndFeed(Channel ch) {
+            super(ch);
+        }
+
+        @Override
+        public Date getPublishedDate() {
+            return publishedDate;
+        }
+
+        @Override
+        public void setPublishedDate(final Date publishedDate) {
+            this.publishedDate = new Date(publishedDate.getTime());
+        }
+    }
 
 }
