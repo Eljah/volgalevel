@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  * Created by eljah32 on 12/19/2015.
  */
 public class DataPopulator {
-    static final String BASE_URL = "http://xn--80adbch2buek4ak3i.xn--p1ai/admingo/uploadimg/";
+    static final String BASE_URL = "http://xn--80adbch2buek4ak3i.xn--p1ai/uploads/";
     static final int MAXCOUNTER = 3100;
     private static final Logger log = Logger.getLogger(DowloadAndParseNavigationDataServlet.class.getName());
 
@@ -68,23 +68,24 @@ public class DataPopulator {
 
         if (args.length==2)
         {
-            id =Integer.parseInt(args[0]);
-            id2=Integer.parseInt(args[1]);
+            id =Integer.parseInt(args[0].substring(2));
+            id2=Integer.parseInt(args[1].substring(2));
         }
 
         if (args.length!=2)
         {
-            id =Integer.parseInt(args[0]);
+            id =Integer.parseInt(args[0].substring(2));
             id2=id;
         }
 
-        pre=args[0].substring(0,args[0].indexOf(id+""));
+        //pre=args[0].substring(0,args[0].indexOf(id+""));
+        pre=args[0].substring(0,2);
 
         try {
             while (id <= id2) {
 
                 try {
-                    URL url = new URL(BASE_URL + pre + id + ".xls");
+                    URL url = new URL(BASE_URL +  String.format("%02d", id)+"." + pre + ".xls");
                     id++;
 
                     //String url = "https://pastvu.com/p/" + id;

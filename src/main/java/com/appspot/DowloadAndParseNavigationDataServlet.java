@@ -53,15 +53,16 @@ public class DowloadAndParseNavigationDataServlet extends HttpServlet {
         if (specificFile==null&&specificDate==null) {
             URL url = null;
             try {
-                url = new URL(BASE_URL + "/info/path/");
+                url = new URL(BASE_URL + "/navigatsiya/operativnaya_informatsiya_o_sudohodnyih_usloviyah/");
             } catch (MalformedURLException e) {
-                log.severe("Document path has error in " + BASE_URL + "/info/path/");
+                log.severe("Document path has error in " + BASE_URL + "/navigatsiya/operativnaya_informatsiya_o_sudohodnyih_usloviyah/");
                 e.printStackTrace();
             }
 
             Document document = null;
             try {
-                document = Jsoup.parse(url.openStream(), "Windows-1251", url.toString());
+                //document = Jsoup.parse(url.openStream(), "Windows-1251", url.toString());
+                document = Jsoup.parse(url.openStream(), "UTF8", url.toString());
                 log.info("Page containing link to the document downloaded well from " + url.toString());
             } catch (IOException e) {
                 log.severe("Page containing link to the document can't be loaded at " + url.toString());
