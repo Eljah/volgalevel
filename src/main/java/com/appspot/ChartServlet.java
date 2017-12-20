@@ -17,7 +17,6 @@ import org.jCharts.axisChart.AxisChart;
 import org.jCharts.chartData.AxisChartDataSet;
 import org.jCharts.chartData.ChartDataException;
 import org.jCharts.chartData.DataSeries;
-import org.jCharts.encoders.JPEG2Encoder;
 import org.jCharts.encoders.JPEGEncoder;
 import org.jCharts.encoders.PNGEncoder;
 import org.jCharts.imageMap.ImageMap;
