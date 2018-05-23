@@ -11,7 +11,7 @@
     <properties>
         <app.id>volgalevel</app.id>
         <app.version>1</app.version>
-        <appengine.version>1.9.30</appengine.version>
+        <appengine.version>1.9.63</appengine.version>
         <gcloud.plugin.version>2.0.9.74.v20150814</gcloud.plugin.version>
 
         <objectify.version>5.1.5</objectify.version>
@@ -19,6 +19,8 @@
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <prerequisites>
