@@ -1,7 +1,6 @@
-App Engine Java Guestbook
-Copyright (C) 2010-2012 Google Inc.
+App Engine Java Volga Stream Gauge visualizer
 
-## Sample guestbook for use with App Engine Java.
+## Volga Stream Gauge visualizer
 
 Requires [Apache Maven](http://maven.apache.org) 3.1 or greater, and JDK 7+ in order to run.
 
